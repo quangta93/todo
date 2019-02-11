@@ -3,6 +3,8 @@ import 'package:todo/todo.dart';
 import 'package:todo/todo_item.dart';
 
 
+enum ConfirmAction { cancel, add }
+
 class HomeScreen extends StatefulWidget {
   HomeScreen({ Key key, this.title }) : super(key: key);
 
@@ -13,15 +15,42 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController controller = TextEditingController();
   List<Todo> todos = List<Todo>();
 
-  @override
-  void initState() {
-    super.initState();
+  Future _showAddDialog() async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Add Todo Item'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Cancel'),
+            onPressed: () {
+              controller.clear();
+              Navigator.of(context).pop(ConfirmAction.cancel);
+            },
+          ),
+          FlatButton(
+            child: Text('Add'),
+            onPressed: () {
+              final text = controller.text;
+              controller.clear();
+              Navigator.of(context).pop(ConfirmAction.add);
 
-    todos.add(Todo.create('trash'));
-    todos.add(Todo.create('clean cup'));
-    todos.add(Todo.create('shower'));
+              setState(() {
+                final item = Todo.create(text);
+                todos.add(item);
+              });
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -36,17 +65,20 @@ class _HomeScreenState extends State<HomeScreen> {
           item: todos[index],
           onChanged: (Todo _item) {
             todos[index] = _item;
-            print('todos[$index] = ${_item.toString()}');
           },
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print('pressed');
-        },
-        tooltip: 'Increment',
         child: Icon(Icons.add),
+        onPressed: _showAddDialog,
       ),
     );
+  }
+
+  @override
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
