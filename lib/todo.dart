@@ -23,6 +23,6 @@ class Todo {
 
   @override
   String toString() {
-    return 'id = $id; state = $state; text = $text';
+    return 'Todo(id = $id; state = $state; text = $text)';
   }
 }
