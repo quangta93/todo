@@ -6,7 +6,7 @@ import 'add_dialog.dart';
 
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({ Key key, this.title }) : super(key: key);
+  HomeScreen({ Key key, this.title }): super(key: key);
 
   final String title;
 

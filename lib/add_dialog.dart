@@ -6,7 +6,7 @@ enum ConfirmAction { cancel, add }
 class AddDialog extends StatefulWidget {
   final Function onAdd;
 
-  AddDialog({ this.onAdd });
+  AddDialog({ Key key, this.onAdd }): super(key: key);
 
   @override
   _AddDialogState createState() => _AddDialogState();
